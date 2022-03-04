@@ -1,6 +1,8 @@
 package kr.or.connect.jdbcexam.dao;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.print.DocFlavor.URL;
 
@@ -13,6 +15,62 @@ public class RoleDao {
 	private static String dbUser = "connectuser";
 	private static String dbpasswd = "connectuser123!@#";
 	
+	public List<Role> getRoles(){
+		List<Role> list = new ArrayList();
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(dburl, dbUser, dbpasswd);
+			String sql = "select * from role";
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			
+			try {
+				while(rs.next()) {
+					String description = rs.getString("description");
+					int id = rs.getInt("role_id");
+					Role role = new Role(id, description);
+					list.add(role);
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if(ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if(conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return list;
+	}
 	public int addRole(Role role) {
 		int insertCount = 0;
 		

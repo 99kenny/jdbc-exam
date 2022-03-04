@@ -1,5 +1,8 @@
 package kr.or.connect.jdbcexam;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import kr.or.connect.jdbcexam.dao.RoleDao;
 import kr.or.connect.jdbcexam.dto.Role;
 
@@ -12,17 +15,10 @@ public class App
     public static void main( String[] args )
     {
     	RoleDao dao = new RoleDao();
-    	Role role = dao.getRole(100);
-    	System.out.println(role);
-    	/////////
-    	int roleId = 500;
-    	String description = "CTO";
-    	
-    	Role role2 = new Role(roleId, description);
-    	
-    	RoleDao dao2 = new RoleDao();
-    	int insertCount = dao2.addRole(role2);
-    	
-    	System.out.println(insertCount);
+    	List<Role> l = dao.getRoles();
+    	for(int i = 0; i < l.size(); i++) {
+    		System.out.println(l.get(i));
+    	}
+    
     }
 }
